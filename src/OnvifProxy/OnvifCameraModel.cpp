@@ -120,7 +120,8 @@ void OnvifCameraModel::scan()
     {
         OnvifData data;
         prepareOnvifData(i, &session, &data);
-        append(new OnvifCamera(data));
+        OnvifCamera *camera = new OnvifCamera(data);
+        append(camera);
     }
     closeSession(&session);
 }

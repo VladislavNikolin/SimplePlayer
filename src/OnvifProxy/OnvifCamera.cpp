@@ -13,9 +13,9 @@ QString OnvifCamera::name() const
     return _onvif_data.camera_name;
 }
 
-QUrl OnvifCamera::url() const
+QUrl OnvifCamera::uri() const
 {   
-    return _url;
+    return _uri;
 }
 
 bool OnvifCamera::is_authorized() const
@@ -30,10 +30,10 @@ void OnvifCamera::authorize(const QString &username, const QString &password)
 
     if (!fillRTSP(&_onvif_data))
     {
-        _url.setUrl(_onvif_data.stream_uri);
-        _url.setUserName(username);
-        _url.setPassword(password);
-        emit urlChanged(_url);
+        _uri.setUrl(_onvif_data.stream_uri);
+        _uri.setUserName(username);
+        _uri.setPassword(password);
+        emit uriChanged(_uri);
 
         _is_authorized = true;
         emit isAuthorizedChanged(_is_authorized);

@@ -10,6 +10,7 @@ qt_add_qml_module(splayer
   URI SimplePlayer
   VERSION ${CMAKE_PROJECT_VERSION}
   QML_FILES
+    SimpleCamera.qml
     SimplePlayer.qml
   SOURCES
     SimplePlayer.cpp

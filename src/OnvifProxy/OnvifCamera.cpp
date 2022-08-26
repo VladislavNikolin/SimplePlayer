@@ -133,9 +133,21 @@ quint8 OnvifCamera::brightness() const
     return _onvif_data.brightness;
 }
 
+void OnvifCamera::setBrightness(const quint8 brightness)
+{
+    _onvif_data.brightness = brightness;
+    emit brightnessChanged(brightness);
+}
+
 quint8 OnvifCamera::saturation() const
 {
     return _onvif_data.saturation;
+}
+
+void OnvifCamera::setSaturation(const quint8 saturation)
+{
+    _onvif_data.saturation = saturation;
+    emit saturationChanged(saturation);
 }
 
 quint8 OnvifCamera::contrast() const
@@ -143,7 +155,19 @@ quint8 OnvifCamera::contrast() const
     return _onvif_data.contrast;
 }
 
+void OnvifCamera::setContrast(const quint8 contrast)
+{
+    _onvif_data.contrast = contrast;
+    emit contrastChanged(contrast);
+}
+
 quint8 OnvifCamera::sharpness() const
 {
     return _onvif_data.sharpness;
+}
+
+void OnvifCamera::setSharpness(const quint8 sharpness)
+{
+    _onvif_data.sharpness = sharpness;
+    emit sharpnessChanged(sharpness);
 }

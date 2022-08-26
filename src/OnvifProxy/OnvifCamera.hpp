@@ -25,10 +25,10 @@ class OnvifCamera : public QObject
     Q_PROPERTY(quint8 ipPrefix READ ipPrefix WRITE setIPPrefix NOTIFY ipPrefixChanged)
 
     // imaging properties
-    Q_PROPERTY(quint8 brightness READ brightness NOTIFY brightnessChanged)
-    Q_PROPERTY(quint8 saturation READ saturation NOTIFY saturationChanged)
-    Q_PROPERTY(quint8 contrast READ contrast NOTIFY contrastChanged)
-    Q_PROPERTY(quint8 sharpness READ sharpness NOTIFY sharpnessChanged)
+    Q_PROPERTY(quint8 brightness READ brightness WRITE setBrightness NOTIFY brightnessChanged)
+    Q_PROPERTY(quint8 saturation READ saturation WRITE setSaturation NOTIFY saturationChanged)
+    Q_PROPERTY(quint8 contrast READ contrast WRITE setContrast NOTIFY contrastChanged)
+    Q_PROPERTY(quint8 sharpness READ sharpness WRITE setSharpness NOTIFY sharpnessChanged)
 
 signals:
     // system signals
@@ -73,9 +73,13 @@ public:
 
     // imaging getters / setters
     quint8 brightness() const;
+    void setBrightness(const quint8 brightness);
     quint8 saturation() const;
+    void setSaturation(const quint8 saturation);
     quint8 contrast() const;
+    void setContrast(const quint8 contrast);
     quint8 sharpness() const;
+    void setSharpness(const quint8 sharpness);
 
 private:
     OnvifData _onvif_data;

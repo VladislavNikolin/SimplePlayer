@@ -137,7 +137,7 @@ Rectangle
         y: (parent.height - height) / 2
         modal: true
         focus: true
-        standardButtons: Dialog.Ok
+        standardButtons: Dialog.Ok | Dialog.Cancel
 
         ColumnLayout {
             anchors.fill: parent
@@ -148,7 +148,7 @@ Rectangle
             }
 
             TextField {
-                readOnly: true
+                id: brightnessField
                 text: camera.brightness
             }
 
@@ -157,7 +157,7 @@ Rectangle
             }
 
             TextField {
-                readOnly: true
+                id: saturationField
                 text: camera.saturation
             }
 
@@ -166,7 +166,7 @@ Rectangle
             }
 
             TextField {
-                readOnly: true
+                id: contrastField
                 text: camera.contrast
             }
 
@@ -175,10 +175,19 @@ Rectangle
             }
 
             TextField {
-                readOnly: true
+                id: sharpnessField
                 text: camera.sharpness
             }
         }
+
+        onAccepted: {
+            camera.brightness = parseInt(brightnessField.text)
+            camera.saturation = parseInt(saturationField.text)
+            camera.contrast = parseInt(contrastField.text)
+            camera.sharpness = parseInt(sharpnessField.text)
+            camera.pushImagingSettings()
+        }
+
     }
 
     Dialog {
@@ -195,11 +204,9 @@ Rectangle
             spacing: 2
 
             CheckBox {
+                id: isDHCPBox
                 checked: camera.isDHCP
                 text: 'DHCP'
-                onCheckedChanged: { 
-                    camera.isDHCP = checked
-                }
             }
 
             Label {
@@ -207,14 +214,12 @@ Rectangle
             }
 
             TextField {
-                enabled: !camera.isDHCP
+                id: ipAddressField
+                enabled: !isDHCPBox.checked
                 text: camera.ipAddress
                 inputMethodHints: Qt.ImhFormattedNumbersOnly
                 validator: RegularExpressionValidator {
                     regularExpression: /^((?: [0-1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])\.){0, 3}(?: [0-1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])$/
-                }
-                onEditingFinished: { 
-                    camera.ipAddress = text
                 }
             }
 
@@ -223,15 +228,13 @@ Rectangle
             }
 
             TextField {
-                enabled: !camera.isDHCP
+                id: ipPrefixField
+                enabled: !isDHCPBox.checked
                 text: camera.ipPrefix
                 inputMethodHints: Qt.ImhFormattedNumbersOnly
                 validator: IntValidator {
                     bottom: 1
                     top: 31
-                }
-                onEditingFinished: { 
-                    camera.ipPrefix = text
                 }
             }
 
@@ -248,6 +251,9 @@ Rectangle
         }
 
         onAccepted: {
+            camera.isDHCP = isDHCPBox.checked
+            camera.ipAddress = ipAddressField.text
+            camera.ipPrefix = parseInt(ipPrefixField.text)
             camera.pushNetworkSettings()
         }
     }

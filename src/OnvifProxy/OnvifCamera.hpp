@@ -16,6 +16,7 @@ class OnvifCamera : public QObject
 
     // system properties
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+    Q_PROPERTY(QString host READ host NOTIFY hostChanged)
     Q_PROPERTY(QUrl uri READ uri NOTIFY uriChanged)
     Q_PROPERTY(bool isAuthorized READ isAuthorized NOTIFY isAuthorizedChanged)
 
@@ -33,6 +34,7 @@ class OnvifCamera : public QObject
 signals:
     // system signals
     void nameChanged(const QString& name);
+    void hostChanged(const QString& host);
     void uriChanged(const QUrl& uri);
     void isAuthorizedChanged(const bool authorized);
 
@@ -51,7 +53,8 @@ public:
     OnvifCamera(const OnvifData &data, QObject *parent = nullptr);
 
     // invokable methods
-    Q_INVOKABLE bool authorize(const QString &username, const QString &password);
+    Q_INVOKABLE bool login(const QString &username, const QString &password);
+    Q_INVOKABLE void logoff();
     Q_INVOKABLE void reboot();
     Q_INVOKABLE void factoryReset();
     Q_INVOKABLE void pushSettings();
@@ -60,6 +63,7 @@ public:
 
     // system getters / setters
     QString name() const;
+    QString host() const;
     QUrl uri() const;
     bool isAuthorized() const;
 
@@ -83,8 +87,9 @@ public:
 
 private:
     OnvifData _onvif_data;
-    bool _is_authorized;
+    bool _is_authorized = false;
     QUrl _uri;
+    QString _host;
 
     void pullSettings();
     void pullSystemSettings();

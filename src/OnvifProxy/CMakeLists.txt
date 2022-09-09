@@ -1,6 +1,7 @@
 add_library(OnvifProxy
   OnvifCamera.cpp
   OnvifCameraModel.cpp
+  OnvifAuthorizedCameraFilterModel.cpp
 )
 
 target_link_libraries(OnvifProxy

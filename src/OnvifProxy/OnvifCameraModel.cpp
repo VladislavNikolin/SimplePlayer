@@ -107,16 +107,50 @@ void OnvifCameraModel::insert(OnvifCamera *camera, int i)
     endInsertRows();
 }
 
+void OnvifCameraModel::remove(int i)
+{
+    beginRemoveRows(QModelIndex(), i, i);
+    _cameras.remove(i);
+
+    // Emit changed signals
+    emit countChanged(count());
+
+    endRemoveRows();
+}
+
+// void OnvifCameraModel::removeAll(int i)
+// {
+//     beginInsertRows(QModelIndex(), i, i);
+//     _cameras.remove(i);
+
+//     // Emit changed signals
+//     emit countChanged(count());
+
+//     endInsertRows();
+// }
+
 OnvifCamera *OnvifCameraModel::get(int i)
 {
     return _cameras[i];
 }
 
+void OnvifCameraModel::reset()
+{
+    beginResetModel();
+
+    _cameras.clear();
+    
+    endResetModel();
+}
+
 void OnvifCameraModel::scan()
 {
+    reset();
+
     OnvifSession session;
     initializeSession(&session);
-    for (int i = 0; i < broadcast(&session); i++)
+    int camera_count = broadcast(&session);
+    for (int i = 0; i < camera_count; i++)
     {
         OnvifData data;
         prepareOnvifData(i, &session, &data);

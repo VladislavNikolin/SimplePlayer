@@ -42,7 +42,9 @@ public:
     int count() const;
     Q_INVOKABLE void append(OnvifCamera *camera);
     Q_INVOKABLE void insert(OnvifCamera *camera, int i);
+    Q_INVOKABLE void remove(int i);
     Q_INVOKABLE OnvifCamera *get(int i);
+    Q_INVOKABLE void reset();
 
     Q_INVOKABLE void scan();
 

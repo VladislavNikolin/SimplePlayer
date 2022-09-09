@@ -7,6 +7,7 @@
 // local headers
 #include "OnvifCamera.hpp"
 #include "OnvifCameraModel.hpp"
+#include "OnvifAuthorizedCameraFilterModel.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -19,6 +20,8 @@ int main(int argc, char *argv[])
         "OnvifProxy", 1, 0, "OnvifCamera");
     qmlRegisterType<OnvifCameraModel>(
         "OnvifProxy", 1, 0, "OnvifCameraModel");
+    qmlRegisterType<OnvifAuthorizedCameraFilterModel>(
+        "OnvifProxy", 1, 0, "OnvifAuthorizedCameraFilterModel");
     engine.load(url);
 
     return app.exec();

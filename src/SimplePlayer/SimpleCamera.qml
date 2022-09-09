@@ -3,8 +3,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtMultimedia
-import QtQuick.Controls.Material 2.12
-
+import QtQuick.Controls.Material
 
 
 Rectangle
@@ -72,65 +71,25 @@ Rectangle
         }
     }
 
-    Label {
-        anchors.fill: parent
-        visible: !camera.isAuthorized
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.bold: true
-        font.capitalization: Font.AllUppercase
-        color: 'white'
-        text: 'Кликните чтобы подключиться'
-        background: Rectangle {
-            color: 'blue'
-        }
+    // Label {
+    //     anchors.fill: parent
+    //     visible: !camera.isAuthorized
+    //     verticalAlignment: Text.AlignVCenter
+    //     horizontalAlignment: Text.AlignHCenter
+    //     font.bold: true
+    //     font.capitalization: Font.AllUppercase
+    //     color: 'white'
+    //     text: 'Кликните чтобы подключиться'
+    //     background: Rectangle {
+    //         color: 'blue'
+    //     }
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: authDialog.open()
-        }
-    }
+    //     MouseArea {
+    //         anchors.fill: parent
+    //         onClicked: authDialog.open()
+    //     }
+    // }
 
-    Dialog {
-        id: authDialog
-        title: 'Авторизация'
-        x: (parent.width - width) / 2
-        y: (parent.height - height) / 2
-        modal: true
-        focus: true
-        standardButtons: Dialog.Ok | Dialog.Cancel
-
-        ColumnLayout {
-            anchors.fill: parent
-            spacing: 2
-
-            Label {
-                text: 'Имя пользователя: '
-            }
-
-            TextField {
-                id: usernameField
-                text: 'admin'
-            }
-
-            Label {
-                text: 'Пароль: '
-            }
-
-            TextField {
-                id: passwordField
-                echoMode: TextInput.Password
-                text: 'admin'
-            }
-        }
-
-        onAccepted: {
-            var username = usernameField.text
-            var password = passwordField.text
-            if (!camera.authorize(username, password))
-                console.log('bad login / password')
-        }
-    }
 
     Dialog {
         id: infoDialog
@@ -220,9 +179,9 @@ Rectangle
                 enabled: !isDHCPBox.checked
                 text: camera.ipAddress
                 inputMethodHints: Qt.ImhFormattedNumbersOnly
-                validator: RegularExpressionValidator {
-                    regularExpression: /^((?: [0-1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])\.){0, 3}(?: [0-1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])$/
-                }
+                // validator: RegularExpressionValidator {
+                //     regularExpression: /^((?: [0-1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])\.){0, 3}(?: [0-1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])$/
+                // }
             }
 
             Label {
@@ -247,7 +206,7 @@ Rectangle
 
             Button {
                 text: 'Сбросить до заводских настроек'
-                palette: Palette { button: 'red' }
+                //palette: Palette { button: 'red' }
                 onClicked: camera.factoryReset()
             }
         }
@@ -258,5 +217,5 @@ Rectangle
             camera.ipPrefix = parseInt(ipPrefixField.text)
             camera.pushNetworkSettings()
         }
-    }
+    }    
 }

@@ -11,6 +11,7 @@ qt_add_qml_module(splayer
   VERSION ${CMAKE_PROJECT_VERSION}
   QML_FILES
     SimpleCamera.qml
+    SimpleLoginDialog.qml
     SimplePlayer.qml
   SOURCES
     SimplePlayer.cpp

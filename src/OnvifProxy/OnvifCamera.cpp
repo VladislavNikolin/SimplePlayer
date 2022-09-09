@@ -4,11 +4,11 @@
 // local headers
 #include "OnvifCamera.hpp"
 
-OnvifCamera::OnvifCamera(const OnvifData &data, QObject *parent) : _onvif_data(data), QObject(parent)
+OnvifCamera::OnvifCamera(const OnvifData &data, QObject *parent) : _onvif_data(data), _host(QUrl(data.xaddrs).host()), QObject(parent)
 {
 }
 
-bool OnvifCamera::authorize(const QString &username, const QString &password)
+bool OnvifCamera::login(const QString &username, const QString &password)
 {
     strcpy(_onvif_data.username, qPrintable(username));
     strcpy(_onvif_data.password, qPrintable(password));
@@ -18,6 +18,11 @@ bool OnvifCamera::authorize(const QString &username, const QString &password)
     pullSettings();
     emit isAuthorizedChanged(_is_authorized = true);
     return true;
+}
+
+void OnvifCamera::logoff()
+{
+    emit isAuthorizedChanged(_is_authorized = false);
 }
 
 void OnvifCamera::reboot()
@@ -83,6 +88,11 @@ void OnvifCamera::pullImagingSettings()
 QString OnvifCamera::name() const
 {
     return _onvif_data.camera_name;
+}
+
+QString OnvifCamera::host() const
+{
+    return _host;
 }
 
 QUrl OnvifCamera::uri() const

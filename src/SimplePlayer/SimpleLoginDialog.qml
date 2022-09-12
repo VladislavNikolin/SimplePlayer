@@ -6,17 +6,13 @@ import QtQuick.Layouts
 
 
 Dialog {
-    property var loginFunc
-    property var rejectFunc
-
-    property alias login: loginField.text
+    property alias username: usernameField.text
     property alias password: passwordField.text
 
     title: 'Авторизация'
     modal: true
     focus: true
-
-    onRejected: rejectFunc
+    standardButtons: Dialog.Ok | Dialog.Cancel
 
     ColumnLayout {
         anchors.fill: parent
@@ -27,8 +23,7 @@ Dialog {
         }
 
         TextField {
-            id: loginField
-            text: 'viewer'
+            id: usernameField
         }
 
         Label {
@@ -38,24 +33,6 @@ Dialog {
         TextField {
             id: passwordField
             echoMode: TextInput.Password
-            text: 'viewernstu1'
-        }
-
-        DialogButtonBox {
-            Button {
-                text: 'Подключиться!'
-                onClicked: {
-                    if (loginFunc(login, password)) {
-                        done(Dialog.Accepted)
-                    }
-                }
-            }
-
-            Button {
-                text: 'Отмена'
-                DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
-                onClicked: done(Dialog.Rejected)
-            }
         }
     }
 }

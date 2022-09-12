@@ -9,6 +9,7 @@ import OnvifProxy
 
 
 ApplicationWindow {
+    id: root
     title: 'Simple Player'
     visible: true
     minimumWidth: 1200
@@ -43,82 +44,6 @@ ApplicationWindow {
         sourceModel: cameras
     }
 
-    Dialog {
-        id: addCameraDialog
-        title: 'Список камер'
-        x: (parent.width - width) / 2
-        y: (parent.height - height) / 2
-        modal: true
-        focus: true
-        width: parent.width / 4
-        height: 3 * parent.height / 4
-        standardButtons: Dialog.Ok | Dialog.Cancel
-
-        ListView {
-            width: parent.width
-            id: addCameraList
-            model: cameras
-            interactive: false
-            anchors.fill: parent
-            spacing: 2
-
-            ScrollBar.vertical: ScrollBar {
-                active: true
-            }
-    
-            delegate: Button {
-                property var camera: modelData
-
-                id: button
-                width: addCameraList.width
-                checkable: true
-
-                contentItem: ColumnLayout {
-                    Label {
-                        text: camera.name
-                    }
-
-                    Label {
-                        text: camera.host
-                        font.pixelSize: 10
-                    }
-                }
-
-                onToggled: {
-                    if (checked) {
-                        loginDialog.loginFunc = (u, p) => {
-                            if (camera.login(u, p)) {
-                                authorized_cameras.filter()
-                                return true;
-                            }
-                            else
-                                return false;
-                        }
-                        loginDialog.open()
-                    }
-                    else {
-                        camera.logoff()
-                        authorized_cameras.filter()
-                    }
-                }
-
-                SimpleLoginDialog {
-                    id: loginDialog
-                    x: (parent.width - width) / 2
-                    y: (parent.height - height) / 2
-
-                    onAccepted: {
-                        button.checked = true
-                    }
-
-                    onRejected: {
-                        button.checked = false
-                    }
-                }
-            }
-        }
-    }
-
     GridView {
         property int columns: 3
 
@@ -142,6 +67,64 @@ ApplicationWindow {
             width: gridView.cellWidth - 2
             height: gridView.cellHeight - 2
             camera: modelData
+
+            onInfoClicked: {
+                var component = Qt.createComponent("SimpleInfoDialog.qml")
+                var dialog = component.createObject(root, { 
+                    camera: modelData,
+                    x: (root.width - width) / 2,
+                    y: (root.height - height) / 2
+                });
+                dialog.open()
+            }
+
+            onSettingsClicked: {
+                var component = Qt.createComponent("SimpleSettingsDialog.qml")
+                var dialog = component.createObject(root, {
+                    camera: modelData,
+                    x: (root.width - width) / 2,
+                    y: (root.height - height) / 2
+                });
+                dialog.open()
+            }
         }
+    }
+
+    SimpleAddCameraDialog {
+        id: addCameraDialog
+        x: (root.width - width) / 2
+        y: (root.height - height) / 2
+        cameras: cameras
+
+        onAddCamera: function(camera, button) {
+            var component = Qt.createComponent("SimpleLoginDialog.qml")
+            var dialog = component.createObject(root, {
+                x: (root.width - width) / 2,
+                y: (root.height - height) / 2,
+                username: 'viewer',
+                password: 'viewernstu1',
+            })
+            dialog.accepted.connect(function() {
+                if (camera.login(dialog.username, dialog.password))
+                    authorized_cameras.filter()
+                else
+                    button.checked = false
+            })
+            dialog.rejected.connect(function() {
+                button.checked = false
+            })
+            dialog.open()
+        }
+
+        onRemoveCamera: function(camera) {
+            camera.logoff()
+            authorized_cameras.filter()
+        }
+    }
+
+    SimpleLoginDialog {
+        id: loginDialog
+        x: (root.width - width) / 2
+        y: (root.height - height) / 2
     }
 }

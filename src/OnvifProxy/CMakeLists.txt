@@ -10,7 +10,7 @@ target_link_libraries(OnvifProxy
     Qt6::Qml
     Qt6::Quick
   PUBLIC
-    onvif
+    onvif_static
 )
 
 target_include_directories(OnvifProxy

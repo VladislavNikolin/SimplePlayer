@@ -1,4 +1,5 @@
 // standard c+ headers
+#include <cmath>
 #include <cstring>
 
 // local headers
@@ -77,7 +78,8 @@ void OnvifCamera::pullNetworkSettings()
 
 void OnvifCamera::pullImagingSettings()
 {
-    strcpy(_onvif_data.videoSourceConfigurationToken, "VideoStream");
+    getProfile(&_onvif_data);
+    getOptions(&_onvif_data);
     getImagingSettings(&_onvif_data);
     emit brightnessChanged(_onvif_data.brightness);
     emit saturationChanged(_onvif_data.saturation);
@@ -140,44 +142,54 @@ void OnvifCamera::setIPPrefix(const quint8 ip_prefix)
 
 quint8 OnvifCamera::brightness() const
 {
-    return _onvif_data.brightness;
+    return to_per(_onvif_data.brightness, _onvif_data.brightness_min, _onvif_data.brightness_max);
 }
 
 void OnvifCamera::setBrightness(const quint8 brightness)
 {
-    _onvif_data.brightness = brightness;
+    _onvif_data.brightness = to_abs(brightness, _onvif_data.brightness_min, _onvif_data.brightness_max);
     emit brightnessChanged(brightness);
 }
 
 quint8 OnvifCamera::saturation() const
 {
-    return _onvif_data.saturation;
+    return to_per(_onvif_data.saturation, _onvif_data.saturation_min, _onvif_data.saturation_max);
 }
 
 void OnvifCamera::setSaturation(const quint8 saturation)
 {
-    _onvif_data.saturation = saturation;
+    _onvif_data.saturation = to_abs(saturation, _onvif_data.saturation_min, _onvif_data.saturation_max);
     emit saturationChanged(saturation);
 }
 
 quint8 OnvifCamera::contrast() const
 {
-    return _onvif_data.contrast;
+    return to_per(_onvif_data.contrast, _onvif_data.contrast_min, _onvif_data.contrast_max);
 }
 
 void OnvifCamera::setContrast(const quint8 contrast)
 {
-    _onvif_data.contrast = contrast;
+    _onvif_data.contrast = to_abs(contrast, _onvif_data.contrast_min, _onvif_data.contrast_max);
     emit contrastChanged(contrast);
 }
 
 quint8 OnvifCamera::sharpness() const
 {
-    return _onvif_data.sharpness;
+    return to_per(_onvif_data.sharpness, _onvif_data.sharpness_min, _onvif_data.sharpness_max);
 }
 
 void OnvifCamera::setSharpness(const quint8 sharpness)
 {
-    _onvif_data.sharpness = sharpness;
+    _onvif_data.sharpness = to_abs(sharpness, _onvif_data.sharpness_min, _onvif_data.sharpness_max);
     emit sharpnessChanged(sharpness);
+}
+
+quint8 OnvifCamera::to_per(quint8 abs, quint8 min, quint8 max) const
+{
+    return std::round(100.0f * (abs - min) / (max - min));
+}
+
+quint8 OnvifCamera::to_abs(quint8 per, quint8 min, quint8 max) const
+{
+    return std::round(per * (max - min) / 100.0f) + min;
 }

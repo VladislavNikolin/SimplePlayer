@@ -11,7 +11,10 @@ qt_add_qml_module(splayer
   VERSION ${CMAKE_PROJECT_VERSION}
   QML_FILES
     SimpleCamera.qml
+    SimpleAddCameraDialog.qml
+    SimpleInfoDialog.qml
     SimpleLoginDialog.qml
+    SimpleSettingsDialog.qml
     SimplePlayer.qml
   SOURCES
     SimplePlayer.cpp
@@ -22,4 +25,11 @@ target_link_libraries(splayer
     Qt6::Gui
     Qt6::Quick
     OnvifProxy
+)
+
+install(
+  TARGETS
+    splayer
+  RUNTIME
+    DESTINATION bin
 )

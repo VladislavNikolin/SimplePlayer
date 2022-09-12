@@ -79,10 +79,16 @@ public:
     quint8 brightness() const;
     void setBrightness(const quint8 brightness);
     quint8 saturation() const;
+    quint8 saturation_min() const;
+    quint8 saturation_max() const;
     void setSaturation(const quint8 saturation);
     quint8 contrast() const;
+    quint8 contrast_min() const;
+    quint8 contrast_max() const;
     void setContrast(const quint8 contrast);
     quint8 sharpness() const;
+    quint8 sharpness_min() const;
+    quint8 sharpness_max() const;
     void setSharpness(const quint8 sharpness);
 
 private:
@@ -95,4 +101,7 @@ private:
     void pullSystemSettings();
     void pullNetworkSettings();
     void pullImagingSettings();
+
+    quint8 to_per(quint8 abs, quint8 min, quint8 max) const;
+    quint8 to_abs(quint8 per, quint8 min, quint8 max) const;
 };
